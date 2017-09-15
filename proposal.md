@@ -20,6 +20,8 @@ strategies to
 http://www.ifpi.org/facts-and-stats.php
 https://papers.nips.cc/paper/5004-deep-content-based-music-recommendation.pdf
 https://www.eecs.qmul.ac.uk/~simond/pub/2012/Song-Dixon-Pearce-CMMR-2012.pdf
+https://www.researchgate.net/publication/220980957_A_new_collaborative_filtering_algorithm_using_K-means_clustering_and_neighbors'_voting
+http://www.cp.jku.at/research/projects/P22856-N23/project.html
 
 ### Approaches to MRS
 
