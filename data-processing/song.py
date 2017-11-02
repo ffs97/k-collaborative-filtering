@@ -1,3 +1,4 @@
+import numpy as np
 import hdf5_getters
 
 
@@ -23,6 +24,7 @@ class Song:
         self.timeSignatureConfidence = str(hdf5_getters.get_time_signature_confidence(songH5File))
         self.title = str(hdf5_getters.get_title(songH5File))
         self.year = str(hdf5_getters.get_year(songH5File))
+        self.segmentTimbres = np.array(hdf5_getters.get_segments_timbre(songH5File), float)
 
         self.songCount += 1
 

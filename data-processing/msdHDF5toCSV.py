@@ -2,13 +2,15 @@ import re
 import os
 import sys
 import glob
+import numpy
 from song import Song
 import hdf5_getters
 
 
 def main():
-    rootPath = "/home/fat-figther/Documents/cs771-project/"
-    outputFile = open(rootPath + "/hybrid-method/data/songs-features.csv", 'w')
+    rootPath = "/home/fat-fighter/Documents/cs771-project/"
+    featuresFile = open(rootPath + "hybrid-method/data/songs-features.csv", 'w')
+    timbresFile = open(rootPath + "hybrid-method/data/songs-timbres.csv", 'w')
 
     attributes = ["SongID", "AlbumID", "AlbumName", "ArtistID", "ArtistLatitude", "ArtistLocation", "ArtistLongitude", "ArtistName",
                   "Danceability", "Duration", "KeySignature", "KeySignatureConfidence", "Tempo", "TimeSignature", "TimeSignatureConfidence", "Title", "Year"]
@@ -18,8 +20,8 @@ def main():
 
     delim = "\t"
 
-    outputFile.write("SongNumber,")
-    outputFile.write(delim.join(attributes) + "\n")
+    featuresFile.write("SongNumber" + delim)
+    featuresFile.write(delim.join(attributes) + "\n")
 
     for root, dirs, files in os.walk(basedir):
         files = glob.glob(os.path.join(root, '*' + ext))
@@ -27,7 +29,7 @@ def main():
             print f
 
             songH5File = hdf5_getters.open_h5_file_read(f)
-            song = Song(str(hdf5_getters.get_song_id(songH5File)))
+            song = Song(songH5File)
 
             row = [str(song.songCount)]
 
@@ -82,9 +84,14 @@ def main():
                     print "There was some Error with the data file" + file
                     row.append("ERROR")
 
-            outputFile.write(delim.join(row) + "\n")
+            featuresFile.write(delim.join(row) + "\n")
+
+            segmentTimbres = [str(segmentTimbre) for segmentTimbre in  song.segmentTimbres.flatten()]
+            segmentTimbres = [str(song.songCount), str(song.id)] + segmentTimbres
+            timbresFile.write(delim.join(segmentTimbres) + "\n")
+
             songH5File.close()
-    outputFile.close()
+    featuresFile.close()
 
 
 if __name__ == "__main__":
