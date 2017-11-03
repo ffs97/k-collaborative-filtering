@@ -1,0 +1,117 @@
+\documentclass[11pt]{article}
+
+\usepackage{proposal}
+
+\setlength\parindent{0pt}
+
+\begin{document}
+\makeheader{CS771: Project Proposal}{Music Recommendation System}
+
+\textbf{* Changes:} \textit{Revised Problem Statement} + \textit{Revised Strategy}
+
+\begin{psection}{Team}
+
+    \begin{tabular}{@{}p{5cm} p{2cm} l}
+        Gurpreet Singh      & 150259 & guggu@iitk.ac.in     \\
+        Pratham Kumar Verma & 150519 & prathamv@iitk.ac.in  \\
+        Bishal              & 150193 & bishal@iitk.ac.in    \\
+        Jaskirat Singh      & 150302 & jaskis@iitk.ac.in    \\
+        Vishal Kashyap      & 150815 & vkashyap@iitk.ac.in  \\
+    \end{tabular}
+
+    \nbr
+
+    \textbf{Mentors} --- Abhinav Garg and Jayant Agrawal
+
+\end{psection}
+
+
+\begin{psection}{Motivation}
+    The concept of recommendation systems is perhaps the most upfront application of machine learning. With the digital market comprising of over 50\% of the recording industry, the problem of Music Recommendation Systems (MRS) has become more relevant over the years. \br
+    
+    MRS is of great help for music fans making it easier for them to explore wide collection of songs from a huge ground of versatility and that too based on his taste and preferences. Almost all streaming services such as Apple Music, Spotify, Google Play Music, etc. use recommendation systems to provide new song recommendations to their users. \br
+    
+    Most of the current MRS are based on the idea of collaborative filtering, which provide recommendations based on the responses of other users on a given song. Though this approach is very successful and accurate, given a huge database of user responses, however it becomes ineffective in cold-start problem where we have no user response (rating) data or we have a new song in the collection which has not received any response (rating). \br
+    
+    To be able to make suggestions independent of other users, we require to do content-based filtering making suggestions based on the user’s playing history. The mere extraction and selection of features, along with setting the prior based on just the demographic parameters of the user makes this is a challenging problem.
+\end{psection}
+
+
+\begin{psection}{Problem Statement}
+    For a given user `U', provide at least `N' suggestions most relevant to his previous listening history. The accuracy of the suggestions depend on the ratio of “positive” response of the user on the provided recommendations. Aim is to provide new and most relevant recommendations.
+\end{psection}
+
+
+\begin{psection}{Past Work}
+
+    Recommendation systems have been extensively explored, and are still being constantly improved. In this project we will be exploring the
+    \textbf{Collaborative Filtering} \cite{ColabFilter} approach as well as \textbf{Music Information Retrieval} (MIR) \cite{Bertin-Mahieux2011} methods. Popular implementations of the two approaches are Spotify and Pandora
+    
+    \begin{psubsection}{Spotify}
+
+        Although Spotify makes use of MIR methods, their main approach to recommendation systems is through Collaborative Filtering. Latent Factor models have been popular since their effectiveness was proved by in the Netflix Prize. Although effective, there are two major issues with collaborative filtering
+
+        \begin{itemize}
+            \item \textbf{Cold-Start Problem:} Since Collaborative Filtering uses Neighbourhood models to find suggestions, it becomes difficult to use Latent Factor Models, when no past user data is available. In this case, there is a lot of inaccuracies in prediction too
+            \item \textbf{Popularity Bias:} Since the number of songs that actually become popular is very less than the number of songs released, it is often that recommender systems based on Collaborative Filtering fail to ever suggest such songs
+        \end{itemize}
+
+        Spotify has also been working on MIR methods (in case of insufficient user data) in their MRS. One of their approaches is summarized in this paper: Deep Content Based Music Recommendation \cite{DeepCB}
+
+    \end{psubsection}
+    
+    \begin{psubsection}{Pandora}
+
+        Pandora started a project in which experts tag songs with certain features. These features are then used to find suggestions, based on users’ profiles. The limitations with this approach are straightforward: highly unscalable and highly inconsistent, however this approach provides very accurate suggestions.
+
+    \end{psubsection}
+    
+    A brief survey of different approaches to MRS is given in this paper: Survey of MSRs \cite{SMRS}
+  
+\end{psection}
+
+
+\begin{psection}{Datasets}
+
+    We will be using the \textbf{Million Song Dataset} (MSD) \cite{IMSD}. The link to the dataset is given in the references section. \br
+    
+    The Million Song Dataset is a freely-available collection of audio features and metadata for a million contemporary popular music tracks. \br
+    
+    The core of the dataset is the feature analysis and metadata for one million songs, provided by The Echo Nest. The dataset includes only the derived features, not any sort of audio. Depending on the features, we might require using other extensions of the MSD such as
+
+    \begin{center}
+        \def\arraystretch{1.5}%
+        \begin{tabular}{r | l}
+        \textbf{Dataset} & \textbf{Extra Features} \\
+        \hline
+        \href{https://labrosa.ee.columbia.edu/millionsong/secondhand}{SecondHandSongs Dataset} & cover songs \\
+        \href{https://labrosa.ee.columbia.edu/millionsong/musixmatch}{musiXmatch Dataset} & lyrics \\
+        \href{https://labrosa.ee.columbia.edu/millionsong/lastfm}{Last.fm Dataset} & song-level tags and similarity \\
+        \href{https://labrosa.ee.columbia.edu/millionsong/tasteprofile}{Taste Profile Subset} & user data \\
+        \href{http://www.tagtraum.com/msd_genre_datasets.html}{tagtraum Genre Annotations} & genre labels  \\
+        
+        \end{tabular}
+    \end{center}
+    
+\end{psection}
+
+
+\clearpage
+
+
+\begin{psection}{Strategy}
+
+    Our main focus will be Hybrid Methods for Recommendation Systems and comparing them with the widely used Collaborative Filtering method. For the Hybrid Method, we will first extract the Mel Frequency Cepstral Coefficients (MFCC) of the songs, and model the individual song features. Using these features, we will cluster (Soft K-Means or GMM) the songs, and use the cluster weights to model the user preferences. \br
+    
+    Once the user preferences are modelled, we cluster the users themselves into groups, and use both the group rating matrix and the user rating matrix to predict ratings (1 - 5) or expected listening value (0 - 1). The final suggestions will be provided based on the highest ratings obtained, from a weighted sum of the user and the group ratings. \br
+
+    The weights on the user ratings will increase as the user provides more and more feadback. This approach allows us to fine-tune recommendations by the user’s actions and implicit preferences. On site actions by the user include upvote to a particular song and the songs he has listened to. \br
+
+    Once we have a training model, we will try to extend to use more sets of features (if time allows) based on a song. These can include textual features such as lyrics, audio features such as frequency, pitch, etc. sentiment features such as mood and danceability, as well as surveyed features such as the total track listens, total likes, etc. \br
+
+\end{psection}
+
+\bibliographystyle{unsrt}
+\bibliography{sample}
+
+\end{document}
