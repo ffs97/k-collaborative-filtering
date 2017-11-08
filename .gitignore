@@ -7,4 +7,4 @@ hybrid-method/.additional-data*
 collaborative-filtering/data*
 /data/*
 .vscode*
-project-env*
+*.pem
