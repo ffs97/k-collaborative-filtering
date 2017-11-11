@@ -10,14 +10,14 @@ from song import Song
 
 def extractFeaturesForSongs(root_path="/home/fat-fighter/Documents/cs771-project/"):
     features_file = open(
-        root_path + "hybrid-method/data/songs-features.csv", 'w')
+        root_path + "hybrid-method/data/features/tracks-features.csv", 'w')
     timbres_file = open(
-        root_path + "hybrid-method/data/songs-timbres.csv", 'w')
+        root_path + "hybrid-method/data/features/tracks-init-timbres.csv", 'w')
 
-    attributes = ["SongID", "AlbumID", "AlbumName", "ArtistID", "ArtistLatitude", "ArtistLocation", "ArtistLongitude", "ArtistName",
+    attributes = ["TrackID", "SongID", "AlbumID", "AlbumName", "ArtistID", "ArtistLatitude", "ArtistLocation", "ArtistLongitude", "ArtistName",
                   "Danceability", "Duration", "KeySignature", "KeySignatureConfidence", "Tempo", "TimeSignature", "TimeSignatureConfidence", "Title", "Year"]
 
-    basedir = "/home/fat-fighter/Documents/cs771-project/hybrid-method/data"
+    basedir = root_path + "hybrid-method/data/million-song-subset"
     ext = ".h5"
 
     delim = "\t"
@@ -34,13 +34,12 @@ def extractFeaturesForSongs(root_path="/home/fat-fighter/Documents/cs771-project
             song = Song(song_h5_file)
 
             row = song.GetAttributes(attributes)
-
             features_file.write(delim.join(row) + "\n")
 
             for segment_timbre in song.segmentTimbres:
                 segment_timbre = [str(timbre) for timbre in segment_timbre]
-                timbres_file.write(str(song.id) + delim +
-                                   delim.join(segment_timbre) + "\n")
+                timbres_file.write(str(song.trackID) +
+                                   delim + delim.join(segment_timbre) + "\n")
 
             song_h5_file.close()
     features_file.close()

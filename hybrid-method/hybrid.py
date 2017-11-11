@@ -14,3 +14,7 @@ from processing import extractFeaturesForSongs
 extractFeaturesForSongs(root)
 
 #%%
+
+from clustering import clusterTracks
+
+clusterTracks()
