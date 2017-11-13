@@ -8,3 +8,4 @@ collaborative-filtering/data*
 /data/*
 .vscode*
 *.pem
+*.ipynb_checkpoints*
